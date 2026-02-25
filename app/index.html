@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo Трекер</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+        input, button { padding: 10px; margin: 5px; font-size: 16px; }
+        .result { background: #f0f0f0; padding: 10px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>📋 Мини-трекер задач</h1>
+    
+    <div>
+        <h3>Создать задачу</h3>
+        <input type="text" id="taskTitle" placeholder="Название задачи">
+        <button onclick="createTask()">Создать</button>
+    </div>
+    
+    <div>
+        <h3>Отметить выполненной</h3>
+        <input type="number" id="taskId" placeholder="ID задачи">
+        <button onclick="markDone()">Готово</button>
+    </div>
+    
+    <div>
+        <button onclick="showPending()">Показать невыполненные</button>
+        <button onclick="showStats()">Статистика</button>
+    </div>
+    
+    <div class="result" id="result"></div>
+
+    <script>
+        const baseUrl = window.location.origin;
+        
+        async function createTask() {
+            const title = document.getElementById('taskTitle').value;
+            if (!title) return alert('Введите название');
+            
+            const response = await fetch(`${baseUrl}/create/${title}`);
+            const text = await response.text();
+            document.getElementById('result').innerText = text;
+        }
+        
+        async function markDone() {
+            const id = document.getElementById('taskId').value;
+            if (!id) return alert('Введите ID');
+            
+            const response = await fetch(`${baseUrl}/done/${id}`);
+            const text = await response.text();
+            document.getElementById('result').innerText = text;
+        }
+        
+        async function showPending() {
+            const response = await fetch(`${baseUrl}/pending`);
+            const text = await response.text();
+            document.getElementById('result').innerText = text;
+        }
+        
+        async function showStats() {
+            const response = await fetch(`${baseUrl}/stats`);
+            const text = await response.text();
+            document.getElementById('result').innerText = text;
+        }
+    </script>
+</body>
+</html>
